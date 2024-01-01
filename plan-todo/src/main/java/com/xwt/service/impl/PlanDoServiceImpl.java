@@ -61,7 +61,9 @@ public class PlanDoServiceImpl implements IPlanDoService
         // 3.前一天没有手动创建的待办没有办的
         List<PlanDo> list = doMapper.selectPlanDoList(planDo);
         for (PlanDo pd : list) {
-            String eventContent = eventMapper.selectOne(new QueryWrapper<PlanEvent>().eq("event_id",pd.getEventId())).getEventContent();
+            String eventContent = eventMapper.selectOne(new QueryWrapper<PlanEvent>()
+                    .eq("event_id",pd.getEventId()))
+                    .getEventContent();
             pd.setEventContent(eventContent);
         }
         return list;
