@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xwt.mapper.PlanDoMapper">
+
+    <resultMap type="PlanDo" id="PlanDoResult">
+        <result property="doId"    column="do_id"    />
+        <result property="eventId"    column="event_id"    />
+        <result property="isDo"    column="is_do"    />
+        <result property="doTime"    column="do_time"    />
+        <result property="showDay"    column="show_day"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectPlanDoVo">
+        select do_id, event_id, is_do, do_time, show_day, status, del_flag, create_by, create_time, update_by, update_time, remark from plan_do
+    </sql>
+
+    <select id="selectPlanDoList" parameterType="PlanDo" resultMap="PlanDoResult">
+        <include refid="selectPlanDoVo"/>
+        <where>
+            <if test="eventId != null "> and event_id = #{eventId}</if>
+            <if test="isDo != null  and isDo != ''"> and is_do = #{isDo}</if>
+            <if test="doTime != null "> and do_time = #{doTime}</if>
+            <if test="showDay != null "> and show_day = #{showDay}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectPlanDoByDoId" parameterType="Long" resultMap="PlanDoResult">
+        <include refid="selectPlanDoVo"/>
+        where do_id = #{doId}
+    </select>
+
+    <insert id="insertPlanDo" parameterType="PlanDo" useGeneratedKeys="true" keyProperty="doId">
+        insert into plan_do
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="eventId != null">event_id,</if>
+            <if test="isDo != null">is_do,</if>
+            <if test="doTime != null">do_time,</if>
+            <if test="showDay != null">show_day,</if>
+            <if test="status != null">status,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="eventId != null">#{eventId},</if>
+            <if test="isDo != null">#{isDo},</if>
+            <if test="doTime != null">#{doTime},</if>
+            <if test="showDay != null">#{showDay},</if>
+            <if test="status != null">#{status},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePlanDo" parameterType="PlanDo">
+        update plan_do
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="eventId != null">event_id = #{eventId},</if>
+            <if test="isDo != null">is_do = #{isDo},</if>
+            <if test="doTime != null">do_time = #{doTime},</if>
+            <if test="showDay != null">show_day = #{showDay},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where do_id = #{doId}
+    </update>
+
+    <delete id="deletePlanDoByDoId" parameterType="Long">
+        delete from plan_do where do_id = #{doId}
+    </delete>
+
+    <delete id="deletePlanDoByDoIds" parameterType="String">
+        delete from plan_do where do_id in
+        <foreach item="doId" collection="array" open="(" separator="," close=")">
+            #{doId}
+        </foreach>
+    </delete>
+</mapper>

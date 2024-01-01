@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xwt.mapper.PlanEventMapper">
+
+    <resultMap type="PlanEvent" id="PlanEventResult">
+        <result property="eventId"    column="event_id"    />
+        <result property="eventContent"    column="event_content"    />
+        <result property="createUserId"    column="create_user_id"    />
+        <result property="endDate"    column="end_date"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectPlanEventVo">
+        select event_id, event_content, create_user_id, end_date, status, del_flag, create_by, create_time, update_by, update_time, remark from plan_event
+    </sql>
+
+    <select id="selectPlanEventList" parameterType="PlanEvent" resultMap="PlanEventResult">
+        <include refid="selectPlanEventVo"/>
+        <where>
+            <if test="eventContent != null  and eventContent != ''"> and event_content like concat('%', #{eventContent}, '%')</if>
+            <if test="createUserId != null "> and create_user_id = #{createUserId}</if>
+            <if test="endDate != null "> and end_date = #{endDate}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectPlanEventByEventId" parameterType="Long" resultMap="PlanEventResult">
+        <include refid="selectPlanEventVo"/>
+        where event_id = #{eventId}
+    </select>
+
+    <insert id="insertPlanEvent" parameterType="PlanEvent">
+        insert into plan_event
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="eventId != null">event_id,</if>
+            <if test="eventContent != null">event_content,</if>
+            <if test="createUserId != null">create_user_id,</if>
+            <if test="endDate != null">end_date,</if>
+            <if test="status != null">status,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="eventId != null">#{eventId},</if>
+            <if test="eventContent != null">#{eventContent},</if>
+            <if test="createUserId != null">#{createUserId},</if>
+            <if test="endDate != null">#{endDate},</if>
+            <if test="status != null">#{status},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updatePlanEvent" parameterType="PlanEvent">
+        update plan_event
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="eventContent != null">event_content = #{eventContent},</if>
+            <if test="createUserId != null">create_user_id = #{createUserId},</if>
+            <if test="endDate != null">end_date = #{endDate},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where event_id = #{eventId}
+    </update>
+
+    <delete id="deletePlanEventByEventId" parameterType="Long">
+        delete from plan_event where event_id = #{eventId}
+    </delete>
+
+    <delete id="deletePlanEventByEventIds" parameterType="String">
+        delete from plan_event where event_id in
+        <foreach item="eventId" collection="array" open="(" separator="," close=")">
+            #{eventId}
+        </foreach>
+    </delete>
+</mapper>
